@@ -30,7 +30,7 @@ func main() {
 	flag.Parse()
 
 	spotti := gospotti.Client{}
-	spotti.Auth.redirectURI = "http://localhost:7171/callback"
+	spotti.Auth.RedirectURI = "http://localhost:7171/callback"
 	spotti.ClientID = "f1b6295487874fafb175fb5818c5abcf"
 	spotti.Authorize(*reauth)
 	printData(spotti.Playback.GetPlaybackInfo())

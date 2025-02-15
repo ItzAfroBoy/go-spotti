@@ -18,14 +18,6 @@ import (
 	"github.com/skratchdot/open-golang/open"
 )
 
-type clientAuth struct {
-	state         string
-	redirectURI   string
-	codeVerifier  string
-	codeChallenge string
-	authCode      string
-}
-
 type tokenResponse struct {
 	AccessToken  string `json:"access_token"`
 	TokenType    string `json:"token_type"`
@@ -34,9 +26,17 @@ type tokenResponse struct {
 	Scope        string `json:"scope"`
 }
 
+type ClientAuth struct {
+	state         string
+	RedirectURI   string
+	codeVerifier  string
+	codeChallenge string
+	authCode      string
+}
+
 type Client struct {
 	Playback     Playback
-	Auth         clientAuth
+	Auth         ClientAuth
 	ClientID     string
 	Token        string
 	RefreshToken string
@@ -131,7 +131,7 @@ func (c *Client) listenForAuthCode() {
 
 func (c *Client) getAuthToken() {
 	fmt.Println("Getting auth token...")
-	res, err := http.Post("https://accounts.spotify.com/api/token", "application/x-www-form-urlencoded", strings.NewReader(fmt.Sprintf("client_id=%s&grant_type=authorization_code&code=%s&redirect_uri=%s&code_verifier=%s", c.clientID, c.auth.authCode, c.auth.redirectURI, c.auth.codeVerifier)))
+	res, err := http.Post("https://accounts.spotify.com/api/token", "application/x-www-form-urlencoded", strings.NewReader(fmt.Sprintf("client_id=%s&grant_type=authorization_code&code=%s&redirect_uri=%s&code_verifier=%s", c.ClientID, c.Auth.authCode, c.Auth.RedirectURI, c.Auth.codeVerifier)))
 	checkError(err)
 	defer res.Body.Close()
 	raw, err := io.ReadAll(res.Body)
@@ -154,7 +154,7 @@ func (c *Client) Authorize(reauth bool) {
 		io.WriteString(sha, c.Auth.codeVerifier)
 		c.Auth.codeChallenge = base64.RawURLEncoding.EncodeToString(sha.Sum(nil))
 
-		authURL := fmt.Sprintf("https://accounts.spotify.com/authorize?client_id=%s&response_type=code&redirect_uri=%s&code_challenge=%s&code_challenge_method=S256&scope=user-read-playback-state user-modify-playback-state&state=%s", c.clientID, c.auth.redirectURI, c.auth.codeChallenge, c.auth.state)
+		authURL := fmt.Sprintf("https://accounts.spotify.com/authorize?client_id=%s&response_type=code&redirect_uri=%s&code_challenge=%s&code_challenge_method=S256&scope=user-read-playback-state user-modify-playback-state&state=%s", c.ClientID, c.Auth.RedirectURI, c.Auth.codeChallenge, c.Auth.state)
 		open.Run(authURL)
 		c.listenForAuthCode()
 		c.getAuthToken()
@@ -163,7 +163,7 @@ func (c *Client) Authorize(reauth bool) {
 
 func (c *Client) Reauthorize() {
 	fmt.Println("Refreshing token...")
-	res, err := http.Post("https://accounts.spotify.com/api/token", "application/x-www-form-urlencoded", strings.NewReader(fmt.Sprintf("client_id=%s&grant_type=refresh_token&refresh_token=%s", c.clientID, c.refreshToken)))
+	res, err := http.Post("https://accounts.spotify.com/api/token", "application/x-www-form-urlencoded", strings.NewReader(fmt.Sprintf("client_id=%s&grant_type=refresh_token&refresh_token=%s", c.ClientID, c.RefreshToken)))
 	checkError(err)
 	defer res.Body.Close()
 	raw, err := io.ReadAll(res.Body)

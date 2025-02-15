@@ -10,7 +10,7 @@
              \ \_\                          
               \/_/                          
 <br>
-A shitty Spotify API Wrapper + Client in Go
+A shitty Spotify API Wrapper + Client written in Go
 </br>
 <img alt="GitHub License" src="https://img.shields.io/github/license/ItzAfroBoy/go-spotti"> <a href="https://www.codefactor.io/repository/github/ItzAfroBoy/go-spotti"><img src="https://www.codefactor.io/repository/github/ItzAfroBoy/go-spotti/badge" alt="CodeFactor" /></a> <img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/ItzAfroBoy/go-spotti">
 </pre>
