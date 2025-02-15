@@ -35,11 +35,11 @@ type tokenResponse struct {
 }
 
 type Client struct {
-	playback     Playback
-	auth         clientAuth
-	clientID     string
-	token        string
-	refreshToken string
+	Playback     Playback
+	Auth         clientAuth
+	ClientID     string
+	Token        string
+	RefreshToken string
 }
 
 func checkError(err error) {
@@ -84,13 +84,13 @@ func (c *Client) loadTokens() {
 	if err != nil {
 		return
 	}
-	c.token = string(item.Data)
+	c.Token = string(item.Data)
 	item, err = k.Get("refreshToken")
 	if err != nil {
 		return
 	}
-	c.refreshToken = string(item.Data)
-	c.playback.client = c
+	c.RefreshToken = string(item.Data)
+	c.Playback.client = c
 }
 
 func (c *Client) saveTokens() {
@@ -100,15 +100,15 @@ func (c *Client) saveTokens() {
 	checkError(err)
 	err = k.Set(keyring.Item{
 		Key:  "token",
-		Data: []byte(c.token),
+		Data: []byte(c.Token),
 	})
 	checkError(err)
 	err = k.Set(keyring.Item{
 		Key:  "refreshToken",
-		Data: []byte(c.refreshToken),
+		Data: []byte(c.RefreshToken),
 	})
 	checkError(err)
-	c.playback.client = c
+	c.Playback.client = c
 }
 
 func (c *Client) listenForAuthCode() {
@@ -126,7 +126,7 @@ func (c *Client) listenForAuthCode() {
 	if url.Query().Get("error") == "access_denied" {
 		checkError(fmt.Errorf("access denied authorization"))
 	}
-	c.auth.authCode = url.Query().Get("code")
+	c.Auth.authCode = url.Query().Get("code")
 }
 
 func (c *Client) getAuthToken() {
@@ -138,21 +138,21 @@ func (c *Client) getAuthToken() {
 	checkError(err)
 	var data tokenResponse
 	checkError(json.Unmarshal(raw, &data))
-	c.token = data.AccessToken
-	c.refreshToken = data.RefreshToken
+	c.Token = data.AccessToken
+	c.RefreshToken = data.RefreshToken
 	c.saveTokens()
 }
 
 func (c *Client) Authorize(reauth bool) {
 	c.loadTokens()
-	if c.token == "" || reauth {
+	if c.Token == "" || reauth {
 		fmt.Println("Authorizing...")
-		c.auth.state = generateRandomString(11)
-		c.auth.codeVerifier = generateRandomString(64)
+		c.Auth.state = generateRandomString(11)
+		c.Auth.codeVerifier = generateRandomString(64)
 
 		sha := sha256.New()
-		io.WriteString(sha, c.auth.codeVerifier)
-		c.auth.codeChallenge = base64.RawURLEncoding.EncodeToString(sha.Sum(nil))
+		io.WriteString(sha, c.Auth.codeVerifier)
+		c.Auth.codeChallenge = base64.RawURLEncoding.EncodeToString(sha.Sum(nil))
 
 		authURL := fmt.Sprintf("https://accounts.spotify.com/authorize?client_id=%s&response_type=code&redirect_uri=%s&code_challenge=%s&code_challenge_method=S256&scope=user-read-playback-state user-modify-playback-state&state=%s", c.clientID, c.auth.redirectURI, c.auth.codeChallenge, c.auth.state)
 		open.Run(authURL)
@@ -170,6 +170,6 @@ func (c *Client) Reauthorize() {
 	checkError(err)
 	var data tokenResponse
 	checkError(json.Unmarshal(raw, &data))
-	c.token = data.AccessToken
-	c.refreshToken = data.RefreshToken
+	c.Token = data.AccessToken
+	c.RefreshToken = data.RefreshToken
 }

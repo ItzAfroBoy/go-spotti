@@ -38,7 +38,7 @@ func (p Playback) GetPlaybackInfo() (data PlaybackState) {
 	httpClient := &http.Client{}
 	req, err := http.NewRequest("GET", "https://api.spotify.com/v1/me/player", nil)
 	checkError(err)
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", p.client.token))
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", p.client.Token))
 	res, err := httpClient.Do(req)
 	checkError(err)
 	defer res.Body.Close()
@@ -60,7 +60,7 @@ func (p Playback) PreviousTrack() {
 	httpClient := &http.Client{}
 	req, err := http.NewRequest("POST", "https://api.spotify.com/v1/me/player/previous", nil)
 	checkError(err)
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", p.client.token))
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", p.client.Token))
 	res, err := httpClient.Do(req)
 	checkError(err)
 	raw, _ := io.ReadAll(res.Body)
@@ -78,7 +78,7 @@ func (p Playback) NextTrack() {
 	httpClient := &http.Client{}
 	req, err := http.NewRequest("POST", "https://api.spotify.com/v1/me/player/next", nil)
 	checkError(err)
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", p.client.token))
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", p.client.Token))
 	res, err := httpClient.Do(req)
 	checkError(err)
 	raw, _ := io.ReadAll(res.Body)
@@ -96,7 +96,7 @@ func (p Playback) Pause() {
 	httpClient := &http.Client{}
 	req, err := http.NewRequest("PUT", "https://api.spotify.com/v1/me/player/pause", nil)
 	checkError(err)
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", p.client.token))
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", p.client.Token))
 	res, err := httpClient.Do(req)
 	checkError(err)
 	raw, _ := io.ReadAll(res.Body)
@@ -114,7 +114,7 @@ func (p Playback) Play() {
 	httpClient := &http.Client{}
 	req, err := http.NewRequest("PUT", "https://api.spotify.com/v1/me/player/play", nil)
 	checkError(err)
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", p.client.token))
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", p.client.Token))
 	res, err := httpClient.Do(req)
 	checkError(err)
 	raw, _ := io.ReadAll(res.Body)
