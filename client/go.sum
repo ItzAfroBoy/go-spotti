@@ -2,10 +2,8 @@ github.com/99designs/go-keychain v0.0.0-20191008050251-8e49817e8af4 h1:/vQbFIOMb
 github.com/99designs/go-keychain v0.0.0-20191008050251-8e49817e8af4/go.mod h1:hN7oaIRCjzsZ2dE+yG5k+rsdt3qcwykqK6HVGcKwsw4=
 github.com/99designs/keyring v1.2.2 h1:pZd3neh/EmUzWONb35LxQfvuY7kiSXAq3HQd97+XBn0=
 github.com/99designs/keyring v1.2.2/go.mod h1:wes/FrByc8j7lFOAGLGSNEg8f/PaI3cgTBqhFkHUrPk=
-github.com/ItzAfroBoy/go-spotti v0.0.0-20250215032354-d43297607555 h1:LtJhd1vrmWRpE/UjwwWKX6PIQfvk/ReWaWzHZi9fKeE=
-github.com/ItzAfroBoy/go-spotti v0.0.0-20250215032354-d43297607555/go.mod h1:EYmb+fLqOX0LD/q0d2rmT5Dk+HfWmkRPDXN7YjaIeTE=
-github.com/ItzAfroBoy/go-spotti v0.0.1 h1:HK5MsLbLKunlQbaQ138X/ChI8JSdhOp1i3jMTycwaLg=
-github.com/ItzAfroBoy/go-spotti v0.0.1/go.mod h1:EYmb+fLqOX0LD/q0d2rmT5Dk+HfWmkRPDXN7YjaIeTE=
+github.com/ItzAfroBoy/go-spotti v0.0.4 h1:ZKQ3fkLHK46ld0iQY2Wq7DAb5gNd57bjP3nrKeAKUMo=
+github.com/ItzAfroBoy/go-spotti v0.0.4/go.mod h1:EYmb+fLqOX0LD/q0d2rmT5Dk+HfWmkRPDXN7YjaIeTE=
 github.com/ItzAfroBoy/swissknife v0.0.0-20220926162405-32041461b839 h1:5m9jGDInQGRPxwN9v5N56qMs2JFwyP4px9n8tNxk35o=
 github.com/ItzAfroBoy/swissknife v0.0.0-20220926162405-32041461b839/go.mod h1:JsL1WKZ+zWE8yZ2eO1XUnIE6tc00q+oRTkh8TecbhdE=
 github.com/danieljoos/wincred v1.1.2 h1:QLdCxFs1/Yl4zduvBdcHB8goaYk9RARS2SgLLRuAyr0=

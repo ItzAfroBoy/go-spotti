@@ -3,7 +3,7 @@ module github.com/ItzAfroBoy/go-spotti/client
 go 1.23.0
 
 require (
-	github.com/ItzAfroBoy/go-spotti v0.0.1
+	github.com/ItzAfroBoy/go-spotti v0.0.4
 	github.com/ItzAfroBoy/swissknife v0.0.0-20220926162405-32041461b839
 )
 
