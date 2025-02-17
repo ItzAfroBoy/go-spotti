@@ -64,7 +64,7 @@ func (p Playback) PreviousTrack() {
 	res, err := httpClient.Do(req)
 	checkError(err)
 	raw, _ := io.ReadAll(res.Body)
-	if res.StatusCode == 204 {
+	if res.StatusCode == 200 {
 		fmt.Println("Playing previous track")
 	} else if res.StatusCode == 401 {
 		p.client.Reauthorize()
@@ -82,7 +82,7 @@ func (p Playback) NextTrack() {
 	res, err := httpClient.Do(req)
 	checkError(err)
 	raw, _ := io.ReadAll(res.Body)
-	if res.StatusCode == 204 {
+	if res.StatusCode == 200 {
 		fmt.Println("Playing next track")
 	} else if res.StatusCode == 401 {
 		p.client.Reauthorize()
@@ -100,7 +100,7 @@ func (p Playback) Pause() {
 	res, err := httpClient.Do(req)
 	checkError(err)
 	raw, _ := io.ReadAll(res.Body)
-	if res.StatusCode == 204 {
+	if res.StatusCode == 200 {
 		fmt.Println("Pausing playback")
 	} else if res.StatusCode == 401 {
 		p.client.Reauthorize()
@@ -118,7 +118,7 @@ func (p Playback) Play() {
 	res, err := httpClient.Do(req)
 	checkError(err)
 	raw, _ := io.ReadAll(res.Body)
-	if res.StatusCode == 204 {
+	if res.StatusCode == 200 {
 		fmt.Println("Starting playback")
 	} else if res.StatusCode == 401 {
 		p.client.Reauthorize()
