@@ -172,4 +172,5 @@ func (c *Client) Reauthorize() {
 	checkError(json.Unmarshal(raw, &data))
 	c.Token = data.AccessToken
 	c.RefreshToken = data.RefreshToken
+	c.saveTokens()
 }
