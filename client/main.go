@@ -26,13 +26,13 @@ func clearScreen() {
 }
 
 func main() {
-	// reauth := flag.Bool("reauth", false, "Reauthorize the client")
+	reauth := flag.Bool("reauth", false, "Reauthorize the client")
 	flag.Parse()
 
-	spotti := gospotti.Client{}
+	spotti := gospotti.Init()
 	spotti.Auth.RedirectURI = "http://localhost:7171/callback"
 	spotti.ClientID = "f1b6295487874fafb175fb5818c5abcf"
-	spotti.Authorize(false)
+	spotti.Authorize(*reauth)
 	printData(spotti.Playback.GetPlaybackInfo())
 	for {
 		input := sk.Prompt("Spotti")

@@ -50,7 +50,7 @@ func checkError(err error) {
 
 func getRandomValues(arr []*big.Int, limit int) []*big.Int {
 	var err error
-	for i := 0; i < len(arr); i++ {
+	for i := range arr {
 		arr[i], err = rand.Int(rand.Reader, big.NewInt(int64(limit)))
 		checkError(err)
 	}
@@ -74,11 +74,27 @@ func generateRandomString(length int) string {
 
 func (c *Client) loadTokens() {
 	item, err := c.keychain.Get("token")
-	checkError(err)
-	c.Token = string(item.Data)
+	if err != nil {
+		if err == keyring.ErrKeyNotFound {
+			c.Token = ""
+		} else {
+			checkError(err)
+		}
+	} else {
+		c.Token = string(item.Data)
+	}
+
 	item, err = c.keychain.Get("refreshToken")
-	checkError(err)
-	c.RefreshToken = string(item.Data)
+	if err != nil {
+		if err == keyring.ErrKeyNotFound {
+			c.RefreshToken = ""
+		} else {
+			checkError(err)
+		}
+	} else {
+		c.RefreshToken = string(item.Data)
+	}
+
 	c.Playback.client = c
 }
 
@@ -88,11 +104,13 @@ func (c *Client) saveTokens() {
 		Data: []byte(c.Token),
 	})
 	checkError(err)
+
 	err = c.keychain.Set(keyring.Item{
 		Key:  "refreshToken",
 		Data: []byte(c.RefreshToken),
 	})
 	checkError(err)
+
 	c.Playback.client = c
 }
 
@@ -103,14 +121,15 @@ func (c *Client) listenForAuthCode() {
 	conn, _ := ln.Accept()
 
 	var buf [1024]byte
-	conn.Write([]byte("HTTP/1.1 200 OK\r\n\r\n"))
 	conn.Read(buf[:])
+	conn.Write([]byte("HTTP/1.1 200 OK\r\n\r\n"))
 	conn.Close()
 	raw, _, _ := strings.Cut(string(buf[:]), " HTTP/1.1\r\n")
 	url, _ := url.Parse(raw)
 	if url.Query().Get("error") == "access_denied" {
 		checkError(fmt.Errorf("access denied authorization"))
 	}
+	
 	c.Auth.authCode = url.Query().Get("code")
 }
 
@@ -121,6 +140,7 @@ func (c *Client) getAuthToken() {
 	defer res.Body.Close()
 	raw, err := io.ReadAll(res.Body)
 	checkError(err)
+
 	var data tokenResponse
 	checkError(json.Unmarshal(raw, &data))
 	c.Token = data.AccessToken
@@ -142,7 +162,7 @@ func Init() *Client {
 
 func (c *Client) Authorize(reauth bool) {
 	c.loadTokens()
-	if c.Token == "" || reauth {
+	if c.Token == "" || c.RefreshToken == "" || reauth {
 		fmt.Println("Authorizing...")
 		c.Auth.state = generateRandomString(11)
 		c.Auth.codeVerifier = generateRandomString(64)
@@ -165,6 +185,7 @@ func (c *Client) Reauthorize() {
 	defer res.Body.Close()
 	raw, err := io.ReadAll(res.Body)
 	checkError(err)
+
 	var data tokenResponse
 	checkError(json.Unmarshal(raw, &data))
 	c.Token = data.AccessToken
