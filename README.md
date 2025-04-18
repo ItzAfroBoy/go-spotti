@@ -12,7 +12,7 @@
 <br>
 A shitty Spotify API Wrapper + Client written in Go
 </br>
-<img alt="GitHub License" src="https://img.shields.io/github/license/ItzAfroBoy/go-spotti"> <a href="https://www.codefactor.io/repository/github/ItzAfroBoy/go-spotti"><img src="https://www.codefactor.io/repository/github/ItzAfroBoy/go-spotti/badge" alt="CodeFactor" /></a> <img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/ItzAfroBoy/go-spotti">
+<img alt="GitHub License" src="https://img.shields.io/github/license/ItzAfroBoy/go-spotti"> <a href="https://www.codefactor.io/repository/github/ItzAfroBoy/go-spotti"><img src="https://www.codefactor.io/repository/github/ItzAfroBoy/go-spotti/badge" alt="CodeFactor" /></a> <img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/ItzAfroBoy/go-spotti"> <img alt="GitHub Tag" src="https://img.shields.io/github/v/tag/ItzAfroBoy/go-spotti?label=Version">
 </pre>
 </div>
 
