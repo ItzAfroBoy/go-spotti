@@ -39,6 +39,7 @@ type Client struct {
 	ClientID     string
 	Token        string
 	RefreshToken string
+	keychain     keyring.Keyring
 }
 
 func checkError(err error) {
@@ -58,7 +59,7 @@ func getRandomValues(arr []*big.Int, limit int) []*big.Int {
 
 func reduce(chars string, arr []*big.Int) string {
 	var result string
-	for i := 0; i < len(arr); i++ {
+	for i := range arr {
 		result += string(chars[arr[i].Int64()])
 	}
 	return result
@@ -72,38 +73,22 @@ func generateRandomString(length int) string {
 }
 
 func (c *Client) loadTokens() {
-	k, err := keyring.Open(keyring.Config{
-		ServiceName: "GoSpotti",
-		KeychainName: "GoSpotti",
-		KeychainTrustApplication: true,
-	})
-	if err != nil {
-		return
-	}
-	item, err := k.Get("token")
-	if err != nil {
-		return
-	}
+	item, err := c.keychain.Get("token")
+	checkError(err)
 	c.Token = string(item.Data)
-	item, err = k.Get("refreshToken")
-	if err != nil {
-		return
-	}
+	item, err = c.keychain.Get("refreshToken")
+	checkError(err)
 	c.RefreshToken = string(item.Data)
 	c.Playback.client = c
 }
 
 func (c *Client) saveTokens() {
-	k, err := keyring.Open(keyring.Config{
-		ServiceName: "GoSpotti",
-	})
-	checkError(err)
-	err = k.Set(keyring.Item{
+	err := c.keychain.Set(keyring.Item{
 		Key:  "token",
 		Data: []byte(c.Token),
 	})
 	checkError(err)
-	err = k.Set(keyring.Item{
+	err = c.keychain.Set(keyring.Item{
 		Key:  "refreshToken",
 		Data: []byte(c.RefreshToken),
 	})
@@ -141,6 +126,18 @@ func (c *Client) getAuthToken() {
 	c.Token = data.AccessToken
 	c.RefreshToken = data.RefreshToken
 	c.saveTokens()
+}
+
+func Init() *Client {
+	k, err := keyring.Open(keyring.Config{
+		ServiceName:              "GoSpotti",
+		KeychainName:             "GoSpotti",
+		KeychainTrustApplication: true,
+	})
+	checkError(err)
+	c := &Client{}
+	c.keychain = k
+	return c
 }
 
 func (c *Client) Authorize(reauth bool) {
