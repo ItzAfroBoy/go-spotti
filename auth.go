@@ -74,6 +74,8 @@ func generateRandomString(length int) string {
 func (c *Client) loadTokens() {
 	k, err := keyring.Open(keyring.Config{
 		ServiceName: "GoSpotti",
+		KeychainName: "GoSpotti",
+		KeychainTrustApplication: true,
 	})
 	if err != nil {
 		return

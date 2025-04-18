@@ -49,7 +49,7 @@ func (p Playback) GetPlaybackInfo() (data PlaybackState) {
 		fmt.Println("No track is currently playing.")
 	} else if res.StatusCode == 401 {
 		p.client.Reauthorize()
-		p.GetPlaybackInfo()
+		return p.GetPlaybackInfo()
 	} else {
 		p.handleErrors(res, raw)
 	}
